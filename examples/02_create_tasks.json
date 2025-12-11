@@ -1,0 +1,34 @@
+[
+  {
+    "project_id": 1,
+    "title": "Implement new product search functionality",
+    "description": "Add advanced filtering and faceted search",
+    "status": "in_progress",
+    "priority": 7,
+    "estimated_hours": 80
+  },
+  {
+    "project_id": 1,
+    "title": "Optimize database queries",
+    "description": "Improve query performance for product listings",
+    "status": "todo",
+    "priority": 5,
+    "estimated_hours": 40
+  },
+  {
+    "project_id": 1,
+    "title": "Add wishlist feature",
+    "description": "Allow users to save products for later",
+    "status": "todo",
+    "priority": 4,
+    "estimated_hours": 60
+  },
+  {
+    "project_id": 1,
+    "title": "Update payment gateway integration",
+    "description": "Migrate to new payment provider API",
+    "status": "todo",
+    "priority": 9,
+    "estimated_hours": 100
+  }
+]

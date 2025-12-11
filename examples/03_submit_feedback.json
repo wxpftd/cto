@@ -1,0 +1,6 @@
+{
+  "project_id": 1,
+  "task_id": 1,
+  "user_name": "Product Manager",
+  "feedback_text": "The search functionality is getting bogged down because we're trying to do too much at once. Customer complaints are coming in about the current search being too slow. I think we should split this task into two phases: first, just get a working search with basic filters deployed quickly, then add the advanced features in a second iteration. Also, the database optimization task should probably be prioritized higher since it's blocking our performance improvements."
+}
