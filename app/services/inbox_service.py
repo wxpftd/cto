@@ -133,7 +133,8 @@ Respond only with valid JSON, no additional text."""
     async def process_inbox_item(
         self,
         inbox_item_id: int,
-        user_id: int
+        user_id: int,
+        trigger_planning: bool = True
     ) -> Dict[str, Any]:
         result = await self.db.get(InboxItem, inbox_item_id)
         if not result:
@@ -149,6 +150,7 @@ Respond only with valid JSON, no additional text."""
         
         project_id = None
         task_id = None
+        should_generate_plan = False
         
         if classification.action == ClassificationAction.CREATE_PROJECT:
             project = await self._create_project(
@@ -158,6 +160,7 @@ Respond only with valid JSON, no additional text."""
             )
             project_id = project.id
             inbox_item.project_id = project_id
+            should_generate_plan = True
         
         elif classification.action == ClassificationAction.CREATE_TASK:
             if classification.project_name:
@@ -178,6 +181,7 @@ Respond only with valid JSON, no additional text."""
                 task_id = task.id
                 inbox_item.project_id = project_id
                 inbox_item.task_id = task_id
+                should_generate_plan = True
             else:
                 logger.warning(f"Cannot create task without project for inbox item {inbox_item_id}")
         
@@ -185,12 +189,26 @@ Respond only with valid JSON, no additional text."""
         await self.db.commit()
         await self.db.refresh(inbox_item)
         
+        if should_generate_plan and trigger_planning and project_id:
+            try:
+                from app.services.planning_service import PlanningService
+                planning_service = PlanningService(self.db)
+                await planning_service.generate_project_plan(
+                    project_id=project_id,
+                    user_id=user_id,
+                    force_regenerate=False
+                )
+                logger.info(f"Auto-generated plan for project {project_id}")
+            except Exception as e:
+                logger.error(f"Failed to auto-generate plan for project {project_id}: {str(e)}")
+        
         return {
             "status": "processed",
             "inbox_item_id": inbox_item_id,
             "classification": classification.model_dump(),
             "project_id": project_id,
-            "task_id": task_id
+            "task_id": task_id,
+            "plan_generated": should_generate_plan and trigger_planning and project_id is not None
         }
     
     async def _create_project(

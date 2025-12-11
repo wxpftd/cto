@@ -179,11 +179,18 @@ class TestInboxService:
     ):
         """Test processing inbox item that creates a project"""
         mock_client = AsyncMock()
-        mock_client.complete.return_value = LLMResponse(
-            content='{"action": "create_project", "project_name": "My Project", "project_description": "A test project", "reasoning": "Large initiative"}',
-            model="gpt-4",
-            tokens_used=100
-        )
+        mock_client.complete.side_effect = [
+            LLMResponse(
+                content='{"action": "create_project", "project_name": "My Project", "project_description": "A test project", "reasoning": "Large initiative"}',
+                model="gpt-4",
+                tokens_used=100
+            ),
+            LLMResponse(
+                content='{"summary": "Plan", "goals": [], "roadmap_steps": [], "milestones": [], "risks": [], "next_steps": []}',
+                model="gpt-4",
+                tokens_used=100
+            )
+        ]
         mock_get_client.return_value = mock_client
         
         service = InboxService(test_db)
@@ -193,11 +200,12 @@ class TestInboxService:
             user_id=user.id
         )
         
-        result = await service.process_inbox_item(inbox_item.id, user.id)
+        result = await service.process_inbox_item(inbox_item.id, user.id, trigger_planning=True)
         
         assert result["status"] == "processed"
         assert result["project_id"] is not None
         assert result["task_id"] is None
+        assert result.get("plan_generated") is True
         
         await test_db.refresh(inbox_item)
         assert inbox_item.status == "processed"
@@ -218,11 +226,18 @@ class TestInboxService:
     ):
         """Test processing inbox item that creates a project and task"""
         mock_client = AsyncMock()
-        mock_client.complete.return_value = LLMResponse(
-            content='{"action": "create_task", "project_name": "Website", "task_title": "Fix homepage", "task_description": "Fix the bug on homepage", "task_priority": "high", "reasoning": "Specific task"}',
-            model="gpt-4",
-            tokens_used=100
-        )
+        mock_client.complete.side_effect = [
+            LLMResponse(
+                content='{"action": "create_task", "project_name": "Website", "task_title": "Fix homepage", "task_description": "Fix the bug on homepage", "task_priority": "high", "reasoning": "Specific task"}',
+                model="gpt-4",
+                tokens_used=100
+            ),
+            LLMResponse(
+                content='{"summary": "Plan", "goals": [], "roadmap_steps": [], "milestones": [], "risks": [], "next_steps": []}',
+                model="gpt-4",
+                tokens_used=100
+            )
+        ]
         mock_get_client.return_value = mock_client
         
         service = InboxService(test_db)
@@ -232,11 +247,12 @@ class TestInboxService:
             user_id=user.id
         )
         
-        result = await service.process_inbox_item(inbox_item.id, user.id)
+        result = await service.process_inbox_item(inbox_item.id, user.id, trigger_planning=True)
         
         assert result["status"] == "processed"
         assert result["project_id"] is not None
         assert result["task_id"] is not None
+        assert result.get("plan_generated") is True
         
         await test_db.refresh(inbox_item)
         assert inbox_item.status == "processed"
