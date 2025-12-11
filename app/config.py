@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     
     # OpenAI
     OPENAI_API_KEY: str
+    OPENAI_API_URL: Optional[str] = None  # Custom base URL for OpenAI API (e.g., for OpenRouter)
     OPENAI_MODEL: str = "gpt-4"
     
     # Application

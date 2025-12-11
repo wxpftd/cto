@@ -6,7 +6,10 @@ from app.config import settings
 
 class LLMService:
     def __init__(self):
-        self.client = OpenAI(api_key=settings.OPENAI_API_KEY)
+        client_kwargs = {"api_key": settings.OPENAI_API_KEY}
+        if settings.OPENAI_API_URL:
+            client_kwargs["base_url"] = settings.OPENAI_API_URL
+        self.client = OpenAI(**client_kwargs)
         self.model = settings.OPENAI_MODEL
         self.max_tokens = settings.LLM_MAX_TOKENS
         self.temperature = settings.LLM_TEMPERATURE

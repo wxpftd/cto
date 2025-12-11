@@ -191,7 +191,24 @@ REDIS_URL=redis://localhost:6379/0
 #### OpenAI Configuration
 ```env
 OPENAI_API_KEY=sk-your-api-key-here
+OPENAI_API_URL=  # Optional: Custom base URL (e.g., https://openrouter.ai/api/v1 for OpenRouter)
 OPENAI_MODEL=gpt-4  # or gpt-3.5-turbo for lower costs
+```
+
+**Using OpenRouter or Other Compatible APIs:**
+
+To use [OpenRouter](https://openrouter.ai/) or other OpenAI-compatible APIs, set the `OPENAI_API_URL`:
+
+```env
+# For OpenRouter
+OPENAI_API_URL=https://openrouter.ai/api/v1
+OPENAI_API_KEY=sk-or-v1-your-openrouter-key
+OPENAI_MODEL=anthropic/claude-3-opus  # Or any model available on OpenRouter
+
+# For other custom endpoints
+OPENAI_API_URL=https://your-custom-api.com/v1
+OPENAI_API_KEY=your-api-key
+OPENAI_MODEL=your-model-name
 ```
 
 #### Application Settings
