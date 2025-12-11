@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+.venv
+.tooling-venv
+dist/
+build/
+*.egg-info/
+.coverage
+htmlcov/
+.mypy_cache/
+.pytest_cache/
+uvicorn.log
