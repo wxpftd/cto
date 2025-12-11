@@ -62,3 +62,8 @@ celerybeat.pid
 
 # Docker
 docker-compose.override.yml
+
+# Frontend (Node.js)
+frontend/node_modules/
+frontend/dist/
+frontend/.env.local
