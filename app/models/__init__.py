@@ -1,10 +1,8 @@
 from sqlalchemy import Column, Integer, String, DateTime, Text, Boolean, ForeignKey, Enum, JSON
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from datetime import datetime
-
-Base = declarative_base()
+from app.core.database import Base
 
 
 class User(Base):
@@ -162,7 +160,7 @@ class LlmCallLog(Base):
     execution_time_ms = Column(Integer)
     status = Column(Enum('success', 'error', 'timeout', name='llm_call_status'), default='success')
     error_message = Column(Text)
-    metadata = Column(JSON)  # Additional context
+    extra_metadata = Column(JSON)  # Additional context
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     # Relationships

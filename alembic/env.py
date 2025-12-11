@@ -8,7 +8,7 @@ import sys
 # Add the project root to Python path
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-from app.database import Base
+from app.core.database import Base
 from app.models import *
 
 # this is the Alembic Config object, which provides

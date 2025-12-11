@@ -189,7 +189,7 @@ def upgrade() -> None:
         sa.Column('execution_time_ms', sa.Integer(), nullable=True),
         sa.Column('status', llm_call_status, nullable=True),
         sa.Column('error_message', sa.Text(), nullable=True),
-        sa.Column('metadata', postgresql.JSON(astext_type=sa.Text()), nullable=True),
+        sa.Column('extra_metadata', postgresql.JSON(astext_type=sa.Text()), nullable=True),
         sa.Column('created_at', sa.DateTime(timezone=True), nullable=True),
         sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
         sa.PrimaryKeyConstraint('id')

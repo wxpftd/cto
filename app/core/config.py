@@ -1,6 +1,6 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import PostgresDsn, computed_field
-from typing import Optional
+from typing import Optional, Literal
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "FastAPI Skeleton"
@@ -25,6 +25,14 @@ class Settings(BaseSettings):
         )
 
     LOG_LEVEL: str = "INFO"
+    
+    # LLM Configuration
+    LLM_PROVIDER: Literal["openai", "claude"] = "openai"
+    OPENAI_API_KEY: Optional[str] = None
+    ANTHROPIC_API_KEY: Optional[str] = None
+    LLM_MODEL: str = "gpt-4"
+    LLM_MAX_RETRIES: int = 3
+    LLM_TIMEOUT_SECONDS: int = 30
 
     model_config = SettingsConfigDict(case_sensitive=True, env_file=".env")
 
