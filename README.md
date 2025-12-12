@@ -1,21 +1,25 @@
-# Feedback Loop API
+# Feedback Loop
 
-An intelligent project management system that captures user feedback and automatically generates re-planning suggestions using LLM (Large Language Model) analysis.
+An intelligent project management system with a modern web UI that captures user feedback and automatically generates re-planning suggestions using LLM (Large Language Model) analysis.
 
 ## 🚀 Features
 
+- **Modern Web UI**: React + TypeScript frontend with Tailwind CSS
 - **Project & Task Management**: Create and manage projects with associated tasks
-- **Feedback Capture**: Submit user feedback linked to projects or specific tasks
+- **Feedback Capture**: Submit user feedback linked to projects or specific tasks via the web interface
 - **AI-Powered Re-planning**: Automatic analysis and adjustment suggestions using OpenAI's GPT models
 - **Async Processing**: Background workers handle LLM processing via Celery
 - **Adjustment Tracking**: Store and retrieve all AI-generated suggestions
 - **RESTful API**: FastAPI-powered REST endpoints with automatic OpenAPI/Swagger documentation
-- **Type Safety**: Full Pydantic validation for request/response models
+- **Type Safety**: Full TypeScript frontend + Pydantic validation for request/response models
+- **Real-time Feedback**: Live status tracking for AI-powered feedback processing
 
 ## 📋 Table of Contents
 
 - [Architecture](#architecture)
 - [Prerequisites](#prerequisites)
+- [Quick Start](#quick-start)
+- [Frontend](#frontend)
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Database Migrations](#database-migrations)
@@ -32,34 +36,43 @@ An intelligent project management system that captures user feedback and automat
 ### System Components
 
 ```
-┌─────────────┐      ┌──────────────┐      ┌─────────────┐
-│   Client    │─────▶│  FastAPI App │─────▶│  PostgreSQL │
-│  (HTTP)     │◀─────│   (REST API) │◀─────│  Database   │
-└─────────────┘      └──────────────┘      └─────────────┘
-                             │
-                             ▼
-                      ┌──────────────┐
-                      │    Redis     │
-                      │   (Broker)   │
-                      └──────────────┘
-                             │
-                             ▼
-                      ┌──────────────┐      ┌─────────────┐
-                      │    Celery    │─────▶│   OpenAI    │
-                      │    Worker    │◀─────│   API (LLM) │
-                      └──────────────┘      └─────────────┘
+┌──────────────┐     ┌─────────────┐      ┌──────────────┐      ┌─────────────┐
+│   Browser    │────▶│   Frontend  │─────▶│  FastAPI App │─────▶│  PostgreSQL │
+│   (React UI) │◀────│  (React TS) │◀─────│   (REST API) │◀─────│  Database   │
+└──────────────┘     └─────────────┘      └──────────────┘      └─────────────┘
+  localhost:5173       localhost:3000       localhost:8000
+                                                  │
+                                                  ▼
+                                           ┌──────────────┐
+                                           │    Redis     │
+                                           │   (Broker)   │
+                                           └──────────────┘
+                                                  │
+                                                  ▼
+                                           ┌──────────────┐      ┌─────────────┐
+                                           │    Celery    │─────▶│   OpenAI    │
+                                           │    Worker    │◀─────│   API (LLM) │
+                                           └──────────────┘      └─────────────┘
 ```
 
 ### Tech Stack
 
-- **API Framework**: FastAPI 0.104+ (Python 3.11+)
-- **Database**: PostgreSQL 15+
-- **ORM**: SQLAlchemy 2.0+
-- **Migrations**: Alembic
-- **Task Queue**: Celery 5.3+
-- **Message Broker**: Redis 7+
-- **LLM Integration**: OpenAI API
-- **Server**: Uvicorn (ASGI)
+**Frontend:**
+- React 18 with TypeScript
+- Tailwind CSS for styling
+- React Router for navigation
+- Axios for API calls
+- Vite as build tool
+
+**Backend:**
+- FastAPI 0.104+ (Python 3.11+)
+- PostgreSQL 15+ for data persistence
+- SQLAlchemy 2.0+ ORM
+- Alembic for migrations
+- Celery 5.3+ for async tasks
+- Redis 7+ as message broker
+- OpenAI API for LLM integration
+- Uvicorn (ASGI) server
 
 ### Data Models
 
@@ -78,10 +91,69 @@ An intelligent project management system that captures user feedback and automat
 ## 📦 Prerequisites
 
 - Python 3.11 or higher
+- Node.js 16+ and npm/yarn
 - PostgreSQL 15 or higher
 - Redis 7 or higher
 - OpenAI API key
 - Docker & Docker Compose (recommended for local development)
+
+## 🚀 Quick Start
+
+### Using Docker Compose (Easiest)
+
+```bash
+# Clone and setup
+git clone <repository-url>
+cd feedback-loop
+cp .env.example .env
+
+# Edit .env and add your OpenAI API key
+nano .env
+
+# Start all services (API, Frontend, Database, Workers)
+make docker-up
+
+# Services will be available at:
+# - Frontend: http://localhost:5173
+# - API Docs: http://localhost:8000/docs
+```
+
+### Using Make Commands
+
+```bash
+# Backend only
+make install
+make setup
+make dev      # Terminal 1 - API server
+make worker   # Terminal 2 - Background worker
+
+# Frontend (in new terminal)
+make frontend-install
+make frontend-dev
+```
+
+## 🎨 Frontend
+
+The project now includes a complete React + TypeScript frontend!
+
+**Features:**
+- Project dashboard with create/edit/delete
+- Task management with priority and status tracking
+- Feedback submission form
+- Real-time AI suggestion viewer
+- Responsive design with Tailwind CSS
+
+**Quick Start:**
+```bash
+cd frontend
+npm install
+npm run dev
+# Open http://localhost:5173
+```
+
+For detailed frontend documentation, see [frontend/README.md](frontend/README.md)
+
+For integration details, see [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md)
 
 ## 🔧 Installation
 
