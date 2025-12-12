@@ -199,10 +199,13 @@ VITE_API_URL=http://localhost:8000
 
 If the frontend can't connect to the backend:
 
-1. Verify backend is running on the correct port (default: 8000)
-2. Check CORS is enabled on backend (it is by default)
-3. Update `VITE_API_URL` in `.env` if backend URL differs
-4. Check browser console for specific error messages
+1. **ERR_NAME_NOT_RESOLVED for "api:8000"**: This means you're running the frontend locally but it's trying to use the Docker service name. Create a `.env` file with `VITE_API_URL=http://localhost:8000` (see Installation step 2)
+2. Verify backend is running on the correct port (default: 8000)
+3. Check CORS is enabled on backend (it is by default)
+4. Update `VITE_API_URL` in `.env` if backend URL differs
+5. Check browser console for specific error messages
+
+**Note**: When running with Docker Compose, the `VITE_API_URL` is automatically set to `http://api:8000` (the Docker service name). For local development, you need a `.env` file with `VITE_API_URL=http://localhost:8000`.
 
 ### Module Not Found Errors
 
