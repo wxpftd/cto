@@ -147,9 +147,12 @@ The project now includes a complete React + TypeScript frontend!
 ```bash
 cd frontend
 npm install
+cp .env.example .env  # Configure API URL for local development
 npm run dev
 # Open http://localhost:5173
 ```
+
+**Note:** When running the frontend locally (not via Docker), you must create a `.env` file with `VITE_API_URL=http://localhost:8000`. Docker Compose handles this automatically.
 
 For detailed frontend documentation, see [frontend/README.md](frontend/README.md)
 
